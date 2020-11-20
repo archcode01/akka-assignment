@@ -9,3 +9,7 @@ Create a project from scratch with below requirements
 * The streams must be resilient which means if the mock server is down for 10-20 seconds it should get the data from the mock server once it is up.
 * Use non blocking calls (Futures).
 * Write the test cases for +ve and -ve scenarios where -ve would be the rest endpoint goes down for 10 seconds but stream recovers and is able to fetch the data as soon as the endpoint is up again.
+
+
+#Solution
+Akka Stream implementation
