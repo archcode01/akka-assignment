@@ -12,7 +12,7 @@ import akka.stream.{ActorMaterializer, RestartSettings}
 import akka.stream.scaladsl.{RestartSource, Sink, Source}
 import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport._
 import com.some.dtos.EmployeeCompanyResponseJsonProtocol._
-import com.some.dtos.EmployeeCompanyResponse
+import com.some.dtos.{Employee, EmployeeCompanyResponse}
 
 import scala.concurrent.Future
 import scala.concurrent.duration._
@@ -57,15 +57,16 @@ object EmployeeReader {
 
   private def companies = Source(1 to 100)
 
-  def readEmployees(companyIds:Seq[Int]) = {
-    val aggregate = Source(companyIds.toIterable)
+
+
+  def readEmployees(companyIds:Seq[Int], accumulator:Seq[Employee] => Unit = Accumulator.printEmployees): Future[Unit] = {
+    val aggregate = Source.fromIterator(() => companyIds.toIterator)
       .mapAsync(parallelism = 2)(getResponse)
       .map(_.employees)
-      .runWith(Sink.foreach(println))
+      .runWith(Sink.foreach(accumulator))
 
-    aggregate.onComplete {
-      case Success(_) => println(s"Stream completed Successfully ")
-      case Failure(error) => sys.error(s"Stream something wrong : $error")
+    aggregate.map(_  => println(s"Stream completed Successfully ")).recover{
+      case ex:Throwable => sys.error(s"Stream something wrong : $ex");throw ex
     }
   }
 

@@ -15,7 +15,7 @@ val specs = "org.specs2"    %% "specs2"    % "2.2.3" % "test"
 val wiremock =   "com.github.tomakehurst" % "wiremock" % "1.33" % "test"
 
 
-libraryDependencies ++= Seq(akkaHttp,akkaStream,akkaHttpSprayJson,akkaStreamContrib, scalaTest,specs,wiremock)
+libraryDependencies ++= Seq(akkaHttp,akkaStream,akkaHttpSprayJson,akkaStreamContrib, scalaTest,wiremock)
 //
 //
 //val aopMerge: MergeStrategy = new MergeStrategy {
