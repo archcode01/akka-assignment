@@ -42,6 +42,7 @@ object EmployeeReader {
       Source.future(responseFuture)
         .mapAsync(parallelism = 1) {
           case HttpResponse(StatusCodes.OK, _, entity, _) =>
+            println(entity.toStrict(2 seconds).toString)
             Unmarshal(entity).to[EmployeeCompanyResponse](um,actorSystem.dispatcher,materializer)
           case HttpResponse(StatusCodes.InternalServerError, _, _, _) =>
             throw new CustomException
